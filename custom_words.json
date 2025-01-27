@@ -1,0 +1,20 @@
+{
+    "custom_word_list": [
+        {"symbol":":)","response":"smiley face"},
+        {"symbol":"( ͡° ͜ʖ ͡°)","response":"lenny face"},
+        {"symbol":":(","response":"sad face"},
+        {"symbol":";)","response":"wink face"},
+        {"symbol":";(","response":"wink with a frown"},
+        {"symbol":":0","response":"suprised face"},
+        {"symbol":":3","response":"cat face"},
+        {"symbol":">:(","response":"angry face"},
+        {"symbol":"14436","response":"i am in your walls"},
+        {"symbol":"7777","response":"it is right behind you"},
+        {"symbol":"nigger","response":"redacted"},
+        {"symbol":"nigg","response":"redacted"},
+        {"symbol":"nigga","response":"redacted"},
+        {"symbol":"faggot","response":"redacted"},
+        {"symbol":"rape","response":"redacted"},
+        {"symbol":"spic","response":"redacted"}
+     ]
+    }
