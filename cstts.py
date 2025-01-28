@@ -3,21 +3,22 @@ import pyttsx3
 import json
 import configparser
 
-# Initialize pyttsx3 engine for TTS
 engine = pyttsx3.init()
+config = configparser.ConfigParser()
 
-# List available voices
+config.read('settings.ini')
+
 voices = engine.getProperty('voices')
-for index, voice in enumerate(voices):
-    print(f"Voice {index}: {voice.name} (ID: {voice.id})")
 
-voice_name = "Microsoft Sam"  
+config.get('General', 'path_console')
+voice_set = config.get('Voice Settings', 'tts_voice')
+speed_set = (config.get('Voice Settings', 'speed'))
+volume_set = (config.get('Voice Settings', 'volume'))
 
-custom_words_path = "C:/Users/cheezy/Documents/tf2 tts/custom_words.json" #path to this file
 
 def load_custom_words():
     try:
-        with open(custom_words_path, 'r') as file:
+        with open('custom_words.json', 'r') as file:
             word_list = json.load(file).get('custom_word_list', [])
             return word_list
     except FileNotFoundError:
@@ -34,24 +35,16 @@ def replace_custom_words(chat_message, custom_words):
     return chat_message
 
 custom_words = load_custom_words()
-
-if not isinstance(custom_words, list):
-    print("Error: custom_words is not a list!")
-else:
-    print(f"Loaded custom words: {custom_words}")
-
-# Set the voice
 for voice in voices:
-    if voice.name == voice_name:
+    if voice.name == voice_set:
         engine.setProperty('voice', voice.id)
-        print(f"Voice set to: {voice_name}")
         break
 
-# Set speech rate and volume
-engine.setProperty('rate', 175)  
-engine.setProperty('volume', 1) 
+engine.setProperty('rate', float(speed_set))
+engine.setProperty('volume', float(volume_set))
 
-log_file_path = "L:/SteamLibrary/steamapps/common/Counter-Strike Global Offensive/game/csgo/console.log" #location fo console.log(cs2 folder)
+log_file_path = config.get('General', 'path_console')
+
 chat_pattern = re.compile(r'.*\[\w+\]\s*([^\:]+):\s*!say\s*(.*)')
 
 def read_chat(chat_message):
@@ -84,11 +77,10 @@ def monitor_log_file_polling():
                         
                         full_message = f"{player_name} says: {chat_message}"
                         read_chat(full_message) 
-
-        except KeyboardInterrupt:
-            print("Exiting...")  
-            break
-
+        except FileNotFoundError:
+            print("console file not present or wrong folder")
+            return
+        
 if __name__ == "__main__":
     print("Monitoring CS2 chat messages...")
     monitor_log_file_polling()
