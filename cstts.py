@@ -15,7 +15,6 @@ voice_set = config.get('Voice Settings', 'tts_voice')
 speed_set = (config.get('Voice Settings', 'speed'))
 volume_set = (config.get('Voice Settings', 'volume'))
 
-
 def load_custom_words():
     try:
         with open('custom_words.json', 'r') as file:
@@ -45,7 +44,14 @@ engine.setProperty('volume', float(volume_set))
 
 log_file_path = config.get('General', 'path_console')
 
-chat_pattern = re.compile(r'.*\[\w+\]\s*([^\:]+):\s*!say\s*(.*)')
+chat_pattern = re.compile(r'.*\[\w+\]\s*([^\:]+):\s*!tts\s*(.*)')
+
+if engine._inLoop:
+    engine.endLoop()
+
+
+with open(log_file_path, 'r+', encoding='utf-8') as file:
+    file.truncate(0)
 
 def read_chat(chat_message):
     print(f"Chat message: {chat_message}")
@@ -54,6 +60,9 @@ def read_chat(chat_message):
 
 def monitor_log_file_polling():
     last_pos = 0 
+    
+    engine.say("tts starting")
+    engine.runAndWait()
 
     while True:
         try:
@@ -78,7 +87,7 @@ def monitor_log_file_polling():
                         full_message = f"{player_name} says: {chat_message}"
                         read_chat(full_message) 
         except FileNotFoundError:
-            print("console file not present or wrong folder")
+            print("Console file not present or wrong folder")
             return
         
 if __name__ == "__main__":
