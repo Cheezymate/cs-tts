@@ -6,7 +6,7 @@ import configparser
 engine = pyttsx3.init()
 config = configparser.ConfigParser()
 
-config.read('settings.ini')
+config.read('./settings.ini')
 
 voices = engine.getProperty('voices')
 
